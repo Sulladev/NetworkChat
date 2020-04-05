@@ -9,6 +9,7 @@ public class GameCanvas extends JPanel {
     long lastFrameTime;
 
     public GameCanvas(MainCircles listener) {
+
         this.listener = listener;
     }
 
@@ -33,4 +34,6 @@ public class GameCanvas extends JPanel {
     public int getRight() {return  getWidth()-1;}
     public int getTop() { return  0;}
     public int getBottom() {return  getHeight()-1;}
+
+
 }
