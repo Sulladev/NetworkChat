@@ -10,9 +10,11 @@ public abstract class Sprite {
     protected float halfHeight;
 
     protected float getLeft() {
+
         return x - halfWidth;
     }
     protected void setLeft(float left) {
+
         x = left + halfWidth;
     }
     protected float getRight() {
@@ -22,6 +24,7 @@ public abstract class Sprite {
         x = right - halfWidth;
     }
     protected float getTop() {
+
         return y - halfHeight;
     }
     protected void setTop(float top) {

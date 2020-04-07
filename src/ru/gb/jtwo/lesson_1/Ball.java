@@ -16,6 +16,15 @@ public class Ball extends Sprite {
         halfWidth = halfHeight;
     }
 
+    //для того чтобы добавлять мячик по координатам клика дописываем конструктор Ball
+
+    Ball (int x, int y){
+    //задаем рандомные размеры из первого конструктора
+        this();
+        this.x = x;
+        this.y = y;
+    }
+
     @Override
     void update(GameCanvas canvas, float deltaTime) {
         x += vX * deltaTime;
