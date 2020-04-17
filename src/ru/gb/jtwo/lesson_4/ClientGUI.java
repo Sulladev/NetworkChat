@@ -35,6 +35,8 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
 
     // добавляем Лист юзеров
     private final JList<String> userList = new JList<>();
+    // если хоть раз показали эксепшн - больше ему не показываю
+    private boolean shownIOErrors = false;
 
 
     public static void main(String[] args) {
@@ -75,7 +77,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         log.setEditable(false);
         cbAlwaysOnTop.addActionListener(this);
         tfMessage.addActionListener(this);
-
+        btnSend.addActionListener(this);
 
         // добавляем на панель компоненты
         panelTop.add(tfIPAddress);
@@ -120,10 +122,64 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         // реализуем нажатие галочки
         if (src == cbAlwaysOnTop) {
             setAlwaysOnTop(cbAlwaysOnTop.isSelected());
+        } else if (src == tfMessage || src == btnSend){
+            sendMessage();
         } else {
-            String text = tfMessage.getText();
-            log.append(text + newline);
-            tfMessage.selectAll();
+            throw new RuntimeException("Unknown source:" + src);
+        }
+     }
+
+     // метод, который лушче вынести наружу и дёргать в любой ситуации
+     private void sendMessage () {
+        String msg = tfMessage.getText();
+        String userName = tfLogin.getText();
+        if("".equals(msg)) return;
+        tfMessage.setText(null);
+        tfMessage.requestFocusInWindow();
+        //будет неплохо расделать складывание в лог и складывание в файл. если наддоест логировать
+         // в файл можно просто закомменттировать метод
+        putLog(String.format("%s: %s", userName, msg));
+        wrtMsgToLogFile(msg, userName);
+     }
+
+     private void wrtMsgToLogFile(String msg, String username){
+        // открываю FWr, записываю в log.txt какие-то сведения
+        try (FileWriter out = new FileWriter("log.txt", true)){
+            out.write(username + ":  " + msg + System.lineSeparator());
+            out.flush();
+        } catch (IOException e) {
+            if (!shownIOErrors) {
+                shownIOErrors = true;
+                showException(Thread.currentThread(), e);
+            }
+        }
+
+     }
+        //метод предназначен не только для для sendMessage
+        //в потоке EventDispatchingThread вызываю методы лога, добавляю msg и тд
+     private void putLog(String msg) {
+        if ("".equals(msg)) return;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                log.append(msg + System.lineSeparator());
+                log.setCaretPosition(log.getDocument().getLength());
+            }
+        });
+
+
+     }
+
+     private void showException(Thread t, Throwable e) {
+        String msg;
+        StackTraceElement[] ste = e.getStackTrace();
+        if (ste.length == 0) {
+            msg = " Empty Stacktrace";
+        } else {
+            msg = String.format("Exception in \"%s\" %s: %s\n\tat %s",
+                    t.getName(), e.getClass().getCanonicalName(), e.getMessage(), ste[0]);
+            //JOptionPane - класс, который отвечает за разные модальные (диалоговые) окошечки
+            JOptionPane.showMessageDialog(this, msg, "Exception", JOptionPane.ERROR_MESSAGE);
         }
      }
 
@@ -132,11 +188,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         e.printStackTrace();
-        String msg;
-        StackTraceElement[] ste = e.getStackTrace();
-        msg = String.format("Exception in \"%s\" %s: %s\n\tat %s",
-                t.getName(), e.getClass().getCanonicalName(), e.getMessage(), ste[0]);
-        JOptionPane.showMessageDialog(this, msg, "Exception", JOptionPane.ERROR_MESSAGE);
+        showException(t,e);
         System.exit(1);
     }
 
