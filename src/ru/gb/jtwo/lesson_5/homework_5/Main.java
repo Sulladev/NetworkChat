@@ -35,7 +35,7 @@ public class Main {
         long currentTime = System.currentTimeMillis();
 
         System.arraycopy(arr,0,arr1,0,h);
-        System.arraycopy(arr,0,arr2,0,h);
+        System.arraycopy(arr,h,arr2,0,h);
 
         Runnable task1 = new Runnable() {
             @Override
@@ -65,6 +65,8 @@ public class Main {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.arraycopy(arr1, 0, arr, 0, h);
+        System.arraycopy(arr2, 0, arr, h, h);
 
         long newTime = System.currentTimeMillis();
         System.out.println("Multithreaded time = " + (newTime - currentTime) + " ms");
