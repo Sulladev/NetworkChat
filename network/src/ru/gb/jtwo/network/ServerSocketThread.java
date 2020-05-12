@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 public class ServerSocketThread extends Thread {
+
     private final int port;
     private final int timeout;
     ServerSocketThreadListener listener;
@@ -27,7 +28,7 @@ public class ServerSocketThread extends Thread {
             while (!isInterrupted()) {
                 Socket s;
                 try {
-                    s = server.accept();
+                    s = server.accept(); // while (!timeout) {}
                 } catch (SocketTimeoutException e) {
                     listener.onServerTimeout(this, server);
                     continue;
