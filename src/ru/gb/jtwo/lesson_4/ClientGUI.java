@@ -21,7 +21,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
     private final JTextField tfPort = new JTextField("8189");
     // компонент "галочка"
     private final JCheckBox cbAlwaysOnTop = new JCheckBox("Always on top", true);
-    private final JTextField tfLogin = new JTextField("ivan");
+    private final JTextField tfLogin = new JTextField("sulla");
     // компонент для пороля. маскированное поле (****)
     private final JPasswordField tfPassword = new JPasswordField("123");
     private final JButton btnLogin = new JButton("Login");
@@ -97,22 +97,22 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         add(panelBottom, BorderLayout.SOUTH);
         setVisible(true);
 
-        File file = new File("log.txt");
-        file.createNewFile();
-
-        FileWriter fileWriter = new FileWriter(file);
-
-        FileReader fileReader = new FileReader(file);
-
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write(log.getText());
-        bufferedWriter.flush();
-        bufferedWriter.close();
-
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        while (bufferedReader.ready()){
-            System.out.println(bufferedReader.readLine());
-        }
+//        File file = new File("log.txt");
+//        file.createNewFile();
+//
+//        FileWriter fileWriter = new FileWriter(file);
+//
+//        FileReader fileReader = new FileReader(file);
+//
+//        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+//        bufferedWriter.write(log.getText());
+//        bufferedWriter.flush();
+//        bufferedWriter.close();
+//
+//        BufferedReader bufferedReader = new BufferedReader(fileReader);
+//        while (bufferedReader.ready()){
+//            System.out.println(bufferedReader.readLine());
+//        }
     }
 
 

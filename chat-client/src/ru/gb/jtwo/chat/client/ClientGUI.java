@@ -124,8 +124,8 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         tfMessage.setText(null);
         tfMessage.requestFocusInWindow();
         socketThread.sendMessage(Library.getTypeBcastClient(msg));
-        //putLog(String.format("%s: %s", username, msg));
-        //wrtMsgToLogFile(msg, username);
+        putLog(String.format("%s: %s", username, msg));
+        wrtMsgToLogFile(msg, username);
     }
 
     private void wrtMsgToLogFile(String msg, String username) {
